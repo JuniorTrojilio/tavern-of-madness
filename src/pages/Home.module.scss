@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  padding: 1rem;
+
+  background-image: url("/bg.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  h1 {
+    color: #fcd604;
+  }
+
+  form {
+    color: white;
+  }
+
+  img {
+    max-width: 160px;
+  }
+
+  input {
+    color: #3fabf3;
+  }
+
+  .button {
+    margin-top: 2rem;
+    width: 100%;
+  }
+
+  .ballon {
+    top: 10px;
+    position: absolute;
+    max-width: 320px;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center; 
+  margin-top: 2rem;
+  img {
+    max-width: 40px;
+  }
+}

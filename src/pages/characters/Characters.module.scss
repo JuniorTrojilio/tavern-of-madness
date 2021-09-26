@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2rem;
+
+  background: #fcd604;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  img {
+    width: 150px;
+  }
+
+  button {
+    margin-top: 1rem;
+  }
+
+  ul {
+    li {
+      text-decoration: none;
+      list-style: none;
+      margin: 2rem 0;
+
+      &:hover{
+        background: rgb(240, 238, 238);
+      }
+    }
+  }
+}
