@@ -6,6 +6,7 @@ type UserContextType = {
   currentChar: Char
   setCurrentChar: (char: Char) => void
   me(): Promise<void>
+  updateMe(id: number): Promise<void>
   hasError: boolean
 }
 
@@ -97,8 +98,19 @@ export function UserProvider({ children }: UserProviderProps) {
     }   
   }
 
+  async function updateMe(id: number) {
+    try {
+      const response = await api.get<User>('/users/me')
+      const user = response.data
+      const char = user.chars.find(c => c.id === id)
+      setCurrentChar(char)
+    } catch (error) {
+      setHasError(true)
+    }   
+  }
+
   return (
-    <UserContext.Provider value={{user, hasError, me, currentChar, setCurrentChar }}>
+    <UserContext.Provider value={{user, hasError, me, currentChar, setCurrentChar, updateMe }}>
       {children}
     </UserContext.Provider>
   )

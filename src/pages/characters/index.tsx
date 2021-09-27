@@ -3,6 +3,7 @@ import { Container, Progress, Button } from 'nes-react';
 import { useEffect, useState } from 'react';
 import { useUser } from '../../hooks/useUser';
 import Router from 'next/router';
+import { setCookie } from 'nookies';
 
 export default function Characters() {
   const { me, user, setCurrentChar } = useUser()
@@ -15,6 +16,10 @@ export default function Characters() {
 
   function handleDetails(id: number){
     const char = user.chars.find(c => c.id === id)
+    setCookie(null, "charID", String(char.id), {
+      maxAge: 30 * 24 * 60 * 60,
+    })
+    
     setCurrentChar(char)
     Router.push("/details")
   }

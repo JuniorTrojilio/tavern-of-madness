@@ -1,4 +1,6 @@
 import { Avatar, Button, Container, Progress } from "nes-react"
+import { parseCookies } from "nookies"
+import { useEffect } from "react"
 import { useUser } from "../../hooks/useUser"
 import { api } from "../../services/api"
 import styles from './Details.module.scss'
@@ -6,10 +8,18 @@ import styles from './Details.module.scss'
 
 
 export default function Details() {
-  const { currentChar } = useUser()
+  const { currentChar, updateMe } = useUser()
+
+  useEffect(() => {
+    if (currentChar.id === 0) {
+      const charID = parseCookies(null, "charID")
+      updateMe(Number(charID))
+    }
+  },[])
 
   function handleMeditate() {
     const response = api.patch(`/chars/meditate/${currentChar.id}/`)
+    alert("Meditation complete!")
   }
 
   return (
@@ -28,6 +38,7 @@ export default function Details() {
 
       <div className={styles.container}>
         <div className={styles.buttonContainer}>
+
           <Button error>Atacar</Button>
           {/*// @ts-ignore: Unreachable code error*/}
           <Button onClick={handleMeditate} warning >Meditar</Button>
