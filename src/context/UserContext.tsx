@@ -1,3 +1,5 @@
+import router from 'next/router';
+import { destroyCookie } from 'nookies';
 import { createContext, useState } from 'react';
 import { api } from '../services/api';
 
@@ -8,6 +10,8 @@ type UserContextType = {
   me(): Promise<void>
   updateMe(id: number): Promise<void>
   hasError: boolean
+  chars: Char[]
+  getChars(): Promise<void>
 }
 
 type User = {
@@ -85,6 +89,7 @@ export const UserContext = createContext({} as UserContextType)
 
 export function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User>({} as User)
+  const [chars, setChars] = useState<Char[]>([])
   const [currentChar, setCurrentChar] = useState<Char>({} as Char)
   const [hasError, setHasError] = useState(false)
 
@@ -95,7 +100,27 @@ export function UserProvider({ children }: UserProviderProps) {
       setUser(user)
     } catch (error) {
       setHasError(true)
+      alert(error.response.data.message)
+      destroyCookie(null, 'charID')
+      destroyCookie(null, 'access')
+      destroyCookie(null, 'refresh')
+      router.push('/')
     }   
+  }
+
+  async function getChars() {
+    try {
+      const response = await api.get<Char[]>('/chars')
+      const chars = response.data
+      setChars(chars)
+    } catch (error) {
+      setHasError(true)
+      alert(error.response.data.message)
+      destroyCookie(null, 'charID')
+      destroyCookie(null, 'access')
+      destroyCookie(null, 'refresh')
+      router.push('/')
+    }  
   }
 
   async function updateMe(id: number) {
@@ -110,7 +135,7 @@ export function UserProvider({ children }: UserProviderProps) {
   }
 
   return (
-    <UserContext.Provider value={{user, hasError, me, currentChar, setCurrentChar, updateMe }}>
+    <UserContext.Provider value={{user, chars, hasError, me, currentChar, setCurrentChar, updateMe, getChars }}>
       {children}
     </UserContext.Provider>
   )

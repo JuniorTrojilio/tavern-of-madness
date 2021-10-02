@@ -18,12 +18,77 @@
     margin-top: 1rem;
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
 
     .bar {
       margin-left: 1.5rem;
       height: 2rem;
     }
+
+    .xpBar{
+      margin-left: 1.5rem;
+      height: 1rem;
+    }
+  }
+}
+
+.Modal {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  max-height: 90%;
+  max-width: 70%;
+  overflow: hidden;
+  background: white;
+  overflow: scroll;
+}
+
+
+.mob {
+  background: #f3a6a0;
+}
+
+.player{
+  background: #f3ede1;
+}
+
+.npc{
+  background: #74b9ff;
+}
+
+
+.charCard {
+  display: flex;
+  flex-direction: column;
+
+  .charInfo{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      margin-top: 1rem;
+      margin-left: auto;
+      max-width: 200px;
+    }
+
+    .charStats{
+      display: flex;
+      align-items: center;
+      margin-top: .2rem;
+
+      .miniBar{
+        margin-left: .5rem;
+        height: .8rem;
+      }
+    }
+  }
+}
+
+.meditationDialog {
+  button {
+    margin: .5rem;
   }
 }
 
