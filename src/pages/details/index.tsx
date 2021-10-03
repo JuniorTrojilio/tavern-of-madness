@@ -67,14 +67,14 @@ export default function Details() {
     setStage(0)
   }
 
-  async function buildAtack(id: number){
-    const attackPrepare: AttackProps = {
-      attacker_id: currentChar.id,
-      deffender_id: 0,
-      skill_id: 0,
-      weapon_id: 0,
-    }
+  const attackPrepare: AttackProps = {
+    attacker_id: currentChar.id,
+    deffender_id: 0,
+    skill_id: 0,
+    weapon_id: 0,
+  }
 
+  async function buildAtack(id: number){
     if (stage === 0){
       attackPrepare.deffender_id = id
       setStage(1)
