@@ -6,6 +6,12 @@ import styles from './Details.module.scss'
 import Modal from 'react-modal'
 import { AttackProps, Char, Skill, Weapon } from "../../context/UserContext"
 
+const ElementType = ['Fogo', 'Água', 'Terra', 'Vento', 'Raio', 'Dia', 'Noite', 
+'Ferro', 'Calor', 'Explosão', 'Magnetismo', 'Luz', 'Gelo', 'Veneno', 'Argila',
+'Áreia', 'Lava', 'Pedra', 'Joia', 'Aceleração', 'Som', 'Plasma', 'Telecinese',
+'Omni', 'Angelos', 'Gravidade', 'Forma', 'Matéria', 'Lâmina Ensanguentada', 
+'Dragão', 'Fábula', 'Ultimo' ];
+
 const customStyles = {
   content: {
     top: '50%',
@@ -159,7 +165,7 @@ export default function Details() {
             <strong>Tipo: {s.damage_type}</strong>
           </div>
           <div className={styles.skillStats}>
-            <strong>Elemento: {s.element}</strong>
+            <strong>Elemento: {ElementType[s.element - 1]}</strong>
           </div>
           <div className={styles.skillStats}>
             <strong>Descrição: {s.description}</strong>
