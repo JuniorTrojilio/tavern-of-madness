@@ -49,9 +49,23 @@ export type Char = {
   silver: number
   bronze: number
   char_type: string
-  element: Element[]
+  skill_set: Skill[]
+  element: Element
   weapon_list: Weapon[]
   pet: Pet[]
+}
+
+export type Skill = {
+  id: number
+  name: string
+  description: string
+  cost: number
+  damage_type: string
+  damage_multiplier: number
+  level: number
+  attempts: number
+  element: number
+  char: number
 }
 
 type Element = {

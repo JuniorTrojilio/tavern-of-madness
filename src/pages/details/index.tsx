@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useUser } from "../../hooks/useUser"
 import styles from './Details.module.scss'
 import Modal from 'react-modal'
-import { AttackProps, Char, Weapon } from "../../context/UserContext"
+import { AttackProps, Char, Skill, Weapon } from "../../context/UserContext"
 
 const customStyles = {
   content: {
@@ -46,7 +46,6 @@ export default function Details() {
 
   async function handleMeditate() {
     const status = await meditate(currentChar.id)
-    console.log(status)
     if (status === 204) {
       setMeditationComplete(true)
       updateMe(currentChar.id)
@@ -62,14 +61,14 @@ export default function Details() {
     setStage(0)
   }
 
-  const attackPrepare: AttackProps = {
-    attacker_id: currentChar.id,
-    deffender_id: 0,
-    skill_id: 0,
-    weapon_id: 0,
-  }
-
   async function buildAtack(id: number){
+    const attackPrepare: AttackProps = {
+      attacker_id: currentChar.id,
+      deffender_id: 0,
+      skill_id: 0,
+      weapon_id: 0,
+    }
+
     if (stage === 0){
       attackPrepare.deffender_id = id
       setStage(1)
@@ -78,14 +77,14 @@ export default function Details() {
       setStage(2)
     }else{
       attackPrepare.weapon_id = id
-      // const status = await attack(attackPrepare)
-      // if (status === 200){
+      const status = await attack(attackPrepare)
+      if (status === 204){
         setAtackModalIsOpen(false)
         setStage(0)
         attackPrepare.deffender_id = 0
         attackPrepare.skill_id = 0
         attackPrepare.weapon_id = 0
-      // }
+      }
     }
   }
 
@@ -140,10 +139,41 @@ export default function Details() {
     )
   )}
 
+  function handleSkillList(skill_set: Skill[]){
+    return skill_set.map(s => (
+      <Container>
+        <div className={styles.skillInfo}>
+          <div className={styles.skillStats}>
+            <strong>Nome: {s.name}</strong>
+          </div>
+          <div className={styles.skillStats}>
+            <strong>Nível: {s.level}</strong>
+          </div>
+          <div className={styles.skillStats}>
+            <strong>Custo: {s.cost}</strong>
+          </div>
+          <div className={styles.skillStats}>
+            <strong>Multiplicador de dano: {s.damage_multiplier}</strong>
+          </div>
+          <div className={styles.skillStats}>
+            <strong>Tipo: {s.damage_type}</strong>
+          </div>
+          <div className={styles.skillStats}>
+            <strong>Elemento: {s.element}</strong>
+          </div>
+          <div className={styles.skillStats}>
+            <strong>Descrição: {s.description}</strong>
+          </div>
+          {/*// @ts-ignore: Unreachable code error*/}
+          <Button onClick={() => buildAtack(s.id)} success>Selecionar</Button>
+        </div>
+      </Container>
+    ))
+  }
+
   
 
   function handleModalContent() {
-    console.log(stage)
     if (stage === 0) {
       return (
         <Container>
@@ -158,7 +188,7 @@ export default function Details() {
         <Container>
           <h2>Selecione o ataque que você vai usar:</h2>
           <div className={styles.charCard}>
-            {/* {handleSkillList(currentChar.skills)} */}
+            {handleSkillList(currentChar.skill_set)}
           </div>
         </Container>
       )
@@ -233,6 +263,12 @@ export default function Details() {
             <div>
               <strong>XP</strong>
               <Progress className={styles.xpBar} warning value={currentChar.exp_gauge} max={currentChar.exp_to_next} />
+            </div>
+            <div>
+              <strong>Elemento Principal: {currentChar.element.name}</strong>
+            </div>
+            <div>
+              <strong>Tipo: {currentChar.element.element_type}</strong>
             </div>
           </header>
 
