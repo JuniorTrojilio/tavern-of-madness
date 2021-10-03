@@ -12,6 +12,8 @@ type UserContextType = {
   hasError: boolean
   chars: Char[]
   getChars(): Promise<void>
+  attack(attackProps: AttackProps): Promise<number>
+  meditate(char_id: number): Promise<number>
 }
 
 type User = {
@@ -61,7 +63,7 @@ type Element = {
   dominancy: number[]
 }
 
-type Weapon = {
+export type Weapon = {
   id: number
   name: string
   weapon_type: string
@@ -77,6 +79,13 @@ type Pet = {
   rank: string
   bound: boolean
   description: string
+}
+
+export type AttackProps = {
+  attacker_id: number
+  weapon_id: number 
+  skill_id: number
+  deffender_id: number
 }
 
 interface UserProviderProps {
@@ -100,12 +109,43 @@ export function UserProvider({ children }: UserProviderProps) {
       setUser(user)
     } catch (error) {
       setHasError(true)
-      alert(error.response.data.message)
       destroyCookie(null, 'charID')
       destroyCookie(null, 'access')
       destroyCookie(null, 'refresh')
       router.push('/')
-    }   
+    }
+  }
+
+  async function meditate(char_id: number){
+    try {
+      const response = await api.patch<Char>(`/chars/meditate/${char_id}/`)
+      return response.status
+    } catch (error) {
+      setHasError(true)
+      destroyCookie(null, 'charID')
+      destroyCookie(null, 'access')
+      destroyCookie(null, 'refresh')
+      router.push('/')
+    }
+  }
+
+  async function attack({ attacker_id, weapon_id, skill_id,deffender_id }: AttackProps): Promise<number> {
+    try {
+      const response = await api.patch<Char>('/chars/attack/', {
+        attacker_id,
+        deffender_id,
+        weapon_id,
+        skill_id,
+      })
+
+      return response.status
+    } catch (error) {
+      setHasError(true)
+      destroyCookie(null, 'charID')
+      destroyCookie(null, 'access')
+      destroyCookie(null, 'refresh')
+      router.push('/')
+    }
   }
 
   async function getChars() {
@@ -115,12 +155,11 @@ export function UserProvider({ children }: UserProviderProps) {
       setChars(chars)
     } catch (error) {
       setHasError(true)
-      alert(error.response.data.message)
       destroyCookie(null, 'charID')
       destroyCookie(null, 'access')
       destroyCookie(null, 'refresh')
       router.push('/')
-    }  
+    }
   }
 
   async function updateMe(id: number) {
@@ -131,11 +170,15 @@ export function UserProvider({ children }: UserProviderProps) {
       setCurrentChar(char)
     } catch (error) {
       setHasError(true)
-    }   
+      destroyCookie(null, 'charID')
+      destroyCookie(null, 'access')
+      destroyCookie(null, 'refresh')
+      router.push('/')
+    }
   }
 
   return (
-    <UserContext.Provider value={{user, chars, hasError, me, currentChar, setCurrentChar, updateMe, getChars }}>
+    <UserContext.Provider value={{attack, meditate, user, chars, hasError, me, currentChar, setCurrentChar, updateMe, getChars }}>
       {children}
     </UserContext.Provider>
   )

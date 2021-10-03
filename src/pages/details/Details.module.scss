@@ -96,10 +96,22 @@
   display: flex;
   flex-direction: column;
   padding: 2rem;
+
+  .infoCharacter {
+    display: flex;
+    flex-direction: column;
+
+    .att {
+      display: flex;
+      flex-direction: column;
+      margin: 0 .5rem;
+    }
+  }
   
   .buttonContainer {
     display: flex;
     justify-content: flex-end;
+    margin-left: auto;
 
     button {
       margin: .5rem;
@@ -129,13 +141,16 @@
         display: flex;
         flex-direction: column;
         flex-direction: flex-start;
-
-        
-
         margin: 1rem
       }
     }
-  }
+  } 
+}
 
-  
+.isLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  height: 90vh;
 }
