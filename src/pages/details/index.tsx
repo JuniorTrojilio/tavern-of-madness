@@ -147,7 +147,7 @@ export default function Details() {
 
   function handleSkillList(skill_set: Skill[]){
     return skill_set.map(s => (
-      <Container>
+      <Container key={s.id}>
         <div className={styles.skillInfo}>
           <div className={styles.skillStats}>
             <strong>Nome: {s.name}</strong>
