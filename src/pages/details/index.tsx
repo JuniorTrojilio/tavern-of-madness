@@ -26,6 +26,7 @@ const customStyles = {
 export default function Details() {
   const [isLoading, setIsLoading] = useState(true)
   const [meditationComplete, setMeditationComplete] = useState(false)
+  const [attackComplete, setAttackComplete] = useState(false)
   const [meditationModalIsOpen, setMeditationModalIsOpen] = useState(false);
   const [atackModalIsOpen, setAtackModalIsOpen] = useState(false);
   const { currentChar, getChars, updateMe, chars, attack, meditate } = useUser()
@@ -67,30 +68,40 @@ export default function Details() {
     setStage(0)
   }
 
-  const attackPrepare: AttackProps = {
+  const [attackPrepare, setAttackPrepare] = useState<AttackProps>({
     attacker_id: currentChar.id,
     deffender_id: 0,
     skill_id: 0,
     weapon_id: 0,
-  }
+  })
 
   async function buildAtack(id: number){
     if (stage === 0){
       attackPrepare.deffender_id = id
+      setAttackPrepare(attackPrepare)
       setStage(1)
     }else if (stage === 1){
       attackPrepare.skill_id = id
+      setAttackPrepare(attackPrepare)
       setStage(2)
     }else{
       attackPrepare.weapon_id = id
+      setAttackPrepare(attackPrepare)
       const status = await attack(attackPrepare)
       if (status === 204){
-        setAtackModalIsOpen(false)
+        setAttackComplete(true)
         setStage(0)
         attackPrepare.deffender_id = 0
         attackPrepare.skill_id = 0
         attackPrepare.weapon_id = 0
+        setAttackPrepare(attackPrepare)
+        await updateMe(currentChar.id)
       }
+
+      setTimeout(() => {
+        setAtackModalIsOpen(false)
+        setAttackComplete(false)
+      }, 3000)
     }
   }
 
@@ -179,7 +190,7 @@ export default function Details() {
 
   
 
-  function handleModalContent() {
+  function handleModalContent(): React.ReactElement {
     if (stage === 0) {
       return (
         <Container>
@@ -251,7 +262,13 @@ export default function Details() {
             contentLabel="Example Modal"
             className={styles.Modal}
           >
-            {handleModalContent()}
+            {attackComplete && (
+              <>
+                <h2>Ataque completo!</h2>
+                <p>Calma, n clica em nada que essa poha fecha sozinha</p>
+              </>
+            )}
+            {!attackComplete && handleModalContent()}
           </Modal>
           <header className={styles.header}>
             <h1>{currentChar.name}</h1>

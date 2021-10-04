@@ -151,7 +151,6 @@ export function UserProvider({ children }: UserProviderProps) {
         weapon_id,
         skill_id,
       })
-
       return response.status
     } catch (error) {
       setHasError(true)
